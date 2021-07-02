@@ -19,6 +19,7 @@ class App extends Component {
     this.updatePost = this.updatePost.bind( this );
     this.deletePost = this.deletePost.bind( this );
     this.createPost = this.createPost.bind( this );
+    this.searchPosts = this.searchPosts.bind( this );
   }
   
   componentDidMount() {
@@ -56,12 +57,21 @@ class App extends Component {
       .catch(err => console.log(err))
   }
 
+  searchPosts(params){
+    const encodedUri = encodeURI(this.state.url + `/filter?text=${params}`);
+    axios.get(encodedUri)
+      .then(({data}) => {
+        this.setState({ posts: data })
+      })
+      .catch(err => console.log(err))
+  }
+
   render() {
     const { posts } = this.state;
 
     return (
       <div className="App__parent">
-        <Header />
+        <Header searchPostFn={this.searchPosts}/>
 
         <section className="App__content">
 
